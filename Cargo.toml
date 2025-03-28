@@ -1,0 +1,22 @@
+[package]
+name = "credit_portfolio_model"
+authors = ["zoonders"]
+description = "Simulation of factor model to calculate loss distribution of a credit portfolio"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+clap = { version = "*", features = ["derive"] }
+csv = "*"
+serde = { version = "*", features = ["derive"] }
+ndarray = "*"
+ndarray-linalg = "*"
+statrs = "*"
+rand = "0.8"
+rand_distr = "0.4"
+rand_pcg = "0.3"
+rayon = "*"
+chrono = "*"
+
+[profile.release]
+debug = true
