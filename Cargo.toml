@@ -7,7 +7,7 @@ edition = "2024"
 license = "MIT"
 repository = "https://github.com/zoonders/credit_portfolio_model"
 keywords = ["simulation", "rust"]
-categories = ["mathematics", "statistics", "Monte Carlo", "finance"]
+categories = ["mathematics", "statistics", "finance"]
 readme = "README.md"
 
 [dependencies]
