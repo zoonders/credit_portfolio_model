@@ -1,0 +1,44 @@
+name: Rust
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    # Install dependencies
+    - name: Install Dependencies
+      run: sudo apt update && sudo apt install -y gfortran libopenblas-dev pkg-config
+
+    # Set environment variables correctly
+    - name: Set OpenBLAS Environment Variables
+      run: |
+        echo "OPENBLAS_DIR=/usr/lib/x86_64-linux-gnu" >> $GITHUB_ENV
+        echo "LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu:\$LD_LIBRARY_PATH" >> $GITHUB_ENV
+        echo "LIBRARY_PATH=/usr/lib/x86_64-linux-gnu:\$LIBRARY_PATH" >> $GITHUB_ENV
+        echo "C_INCLUDE_PATH=/usr/include:\$C_INCLUDE_PATH" >> $GITHUB_ENV
+        echo "CFLAGS=-L/usr/lib/x86_64-linux-gnu -I/usr/include" >> $GITHUB_ENV
+        echo "RUSTFLAGS=-C link-arg=-L/usr/lib/x86_64-linux-gnu -C link-arg=-lopenblas" >> $GITHUB_ENV
+
+    # Verify OpenBLAS installation
+    - name: Check Dependencies
+      run: |
+        ldconfig -p | grep openblas || echo "OpenBLAS not found"
+        pkg-config --libs openblas || echo "pkg-config cannot find OpenBLAS"
+
+    # Cargo
+    - name: Build
+      run: cargo build --verbose
+    - name: Run tests
+      run: cargo test --verbose
