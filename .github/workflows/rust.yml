@@ -18,6 +18,10 @@ jobs:
     - uses: actions/checkout@v4
     - name: Install OpenBlas
       run: sudo apt-get update && sudo apt-get install -y libopenblas-dev
+    - name: Set OpenBLAS Environment Variables
+      run: echo "OPENBLAS_DIR=/usr/lib" >> $GITHUB_ENV
+    - name: Check Dependencies
+      run: ldconfig -p | grep openblas || echo "OpenBLAS not found"
     - name: Build
       run: cargo build --verbose
     - name: Run tests
