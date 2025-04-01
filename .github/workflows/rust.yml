@@ -16,14 +16,28 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: Install gfortran
-      run: sudo apt update && sudo apt install -y gfortran
-    - name: Install OpenBlas
-      run: sudo apt-get update && sudo apt-get install -y libopenblas-dev
+
+    # Install dependencies
+    - name: Install Dependencies
+      run: sudo apt update && sudo apt install -y gfortran libopenblas-dev pkg-config
+
+    # Set environment variables correctly
     - name: Set OpenBLAS Environment Variables
-      run: echo "OPENBLAS_DIR=/usr/lib" >> $GITHUB_ENV
+      run: |
+        echo "OPENBLAS_DIR=/usr/lib/x86_64-linux-gnu" >> $GITHUB_ENV
+        echo "LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu:\$LD_LIBRARY_PATH" >> $GITHUB_ENV
+        echo "LIBRARY_PATH=/usr/lib/x86_64-linux-gnu:\$LIBRARY_PATH" >> $GITHUB_ENV
+        echo "C_INCLUDE_PATH=/usr/include:\$C_INCLUDE_PATH" >> $GITHUB_ENV
+        echo "CFLAGS=-L/usr/lib/x86_64-linux-gnu -I/usr/include" >> $GITHUB_ENV
+        echo "RUSTFLAGS=-C link-arg=-L/usr/lib/x86_64-linux-gnu -C link-arg=-lopenblas" >> $GITHUB_ENV
+
+    # Verify OpenBLAS installation
     - name: Check Dependencies
-      run: ldconfig -p | grep openblas || echo "OpenBLAS not found"
+      run: |
+        ldconfig -p | grep openblas || echo "OpenBLAS not found"
+        pkg-config --libs openblas || echo "pkg-config cannot find OpenBLAS"
+
+    # Cargo
     - name: Build
       run: cargo build --verbose
     - name: Run tests
