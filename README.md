@@ -21,7 +21,15 @@ Besides, Mean and quantile information of the loss distribution is provided on s
 credit_portfolio_model --input /path/to/read/input/csv/files/from --output /path/to/store/output/csv --num-trials NUMBERTRIALS --chunk-size TRIALSPERTHREAD
 ```
 
-The input consists of six files.
+The input consists of six files. The files are
+* `borrower.csv`
+** `borrower_id` - Unique identifier of Borrower ID (string-like) that is used to map with other files
+** `risk_group` - Unique identifier of Risk Group ID (string-like). Risk Groups share one of the idiosyncratic risk drivers
+** `rating` - Current rating, given as index to a vector, i.e. starting at `0` and continuous.
+    The last rating class is considered default, although the current implementation does no special treatment of defaults
+** `r2` - Correlation to the systematic risk factor, i.e. $\rho$.
+** `eps` - Correlation to the risk group, i.e. $\epsilon$.
+* `exposure.csv`
 
 ## Documentation
 
