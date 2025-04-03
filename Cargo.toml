@@ -2,7 +2,7 @@
 name = "credit_portfolio_model"
 authors = ["zoonders"]
 description = "Simulation of factor model to calculate loss distribution of a credit portfolio"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2024"
 license = "MIT"
 repository = "https://github.com/zoonders/credit_portfolio_model"
