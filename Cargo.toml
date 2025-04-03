@@ -29,3 +29,8 @@ criterion = "0.3.*"
 [[bench]]
 name = "cpm_benchmark"
 harness = false
+
+[lib]
+name = "credit_portfolio_model"
+path = "src/lib.rs"
+
