@@ -4,7 +4,7 @@ use rayon::prelude::*;
 use rand::Rng;
 use rand::SeedableRng;
 use rand_pcg::Pcg64;
-use rand_distr::StandardNormal;
+use rand_distr::{Distribution, StandardNormal};
 use std::sync::{Arc, Mutex};
 
 use crate::risk_group;
@@ -60,23 +60,22 @@ impl Portfolio {
     pub fn trial(&self, rng: &mut rand_pcg::Pcg64) -> Array1<f64> {
         let mut out_borr: Array1<f64> = Array1::zeros(self.num_borrower);
 
+        // Random Number Generator
+        let mut nrm_gen = StandardNormal.sample_iter(rng);
+
         // Generate systematic factors once
-        let mut n = Array1::<f64>::zeros(self.risk_factors);
-
-        for i in 0..self.risk_factors {
-            n[i] = rng.sample(StandardNormal);
-        }
-
+        let n = Array1::from_iter(nrm_gen.by_ref().take(self.risk_factors));
         let rf = self.lower.dot(&n);
 
+        // Loop over portfolio
         let mut index: usize = 0;
         for rg in self.iter_risk_group() {
             // Risk Group idiosyncratic risk
-            let e2: f64 = rng.sample(StandardNormal);
+            let e2 = nrm_gen.next().unwrap();
 
             for borr in rg.iter_borrower() {
                 // Borrower idiosyncratic risk
-                let e1: f64 = rng.sample(StandardNormal);
+                let e1 = nrm_gen.next().unwrap();
 
                 // Systematic risk factor
                 let y = borr.risk_factor(&rf);
