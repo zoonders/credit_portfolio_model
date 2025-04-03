@@ -22,7 +22,7 @@ Here, the variables are defined as follows:
 * $`e_1`$ is the idiosyncratic risk variable only corresponding to the borrower
 * $`e_2`$ is the idiosyncratic risk variable of the risk group that the borrower belongs to, e.g. linked to other companies through ownership
 * $`y`$ is the systematic risk, which is defined as a linear combination of the vector $`x`$ which is distributed according to a multivariate
-normal distribution with covariance matrix `\Sigma`. Besides, the borrower dependency to the risk drives is specified by weights `\phi`.
+normal distribution with covariance matrix $`\Sigma`$. Besides, the borrower dependency to the risk drives is specified by weights $`\phi`$.
 The resulting random variable is then defined as $`y=\frac{\phi\cdot x}{\sqrt{\phi^T\cdot\Sigma\cdot\phi}}`$.
 * $`r^2`$ and $\epsilon$ specifiy the correlation of the borrowers asset value to the systematic component or the risk group.
 
